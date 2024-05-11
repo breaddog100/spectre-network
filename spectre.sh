@@ -28,6 +28,7 @@ function install_node() {
 	unzip datadir2.zip -d $HOME/.spectred/spectre-mainnet
 	cd $HOME/spectre-network/bin
 	screen -dmS spectre_node bash -c './spectred --utxoindex'
+	sleep 10
 	screen -dmS spectre_wallet_daemon bash -c './spectrewallet start-daemon'
     
 	echo "部署完成，请先生成钱包，然后开始挖矿"
