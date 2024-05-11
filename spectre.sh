@@ -28,6 +28,7 @@ function install_node() {
 	unzip datadir2.zip -d $HOME/.spectred/spectre-mainnet
 	cd $HOME/spectre-network/bin
 	screen -dmS spectre_node bash -c './spectred --utxoindex'
+	screen -dmS spectre_wallet_daemon bash -c './spectrewallet start-daemon'
     
 	echo "部署完成，请先生成钱包，然后开始挖矿"
 }
@@ -46,14 +47,14 @@ function create_wallet(){
 function start_mining(){
 	
     # 启动挖矿
-	cd ~/bin
+	cd $HOME/spectre-network/bin
 	read -p "钱包地址: " wallet_addr
 	cpu_core=$(lscpu | grep '^CPU(s):' | awk '{print $2}')
 	read -p "当前设备CPU数量：$cpu_core , 请输入挖矿的CPU核心数: " cpu_core
-	screen -dmS spewa bash -c "./spectreminer --miningaddr='$wallet_addr' --workers '$cpu_core'"
+	screen -dmS spectre_miner bash -c "./spectreminer --miningaddr='spectre:$wallet_addr' --workers '$cpu_core'"
     echo "ctrl + a + d 退出"
 	sleep 2
-	screen -r spewa
+	screen -r spectre_miner
 }
 
 # 查看日志
@@ -61,7 +62,15 @@ function view_logs(){
 	clear
 	echo "5秒后进入screen，查看完请ctrl + a + d 退出"
 	sleep 5
-	screen -r spewa
+	screen -r spectre_miner
+}
+
+# 查看余额
+function create_wallet(){
+
+    read -p "钱包地址:" wallet_addr
+    $HOME/spectre-network/bin/spectrewallet balance $wallet_addr
+
 }
 
 # 主菜单
@@ -76,6 +85,7 @@ function main_menu() {
 	    echo "2. 创建钱包"
 	    echo "3. 开始挖矿"
 	    echo "4. 查看日志"
+	    echo "5. 查看余额"
 	    echo "0. 退出脚本exit"
 	    read -p "请输入选项: " OPTION
 	
@@ -84,6 +94,7 @@ function main_menu() {
 	    2) create_wallet ;;
 	    3) start_mining ;;
 	    4) view_logs ;;
+	    5) create_wallet ;;
 	    0) echo "退出脚本。"; exit 0 ;;
 	    *) echo "无效选项，请重新输入。"; sleep 3 ;;
 	    esac
