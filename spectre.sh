@@ -68,9 +68,9 @@ function view_logs(){
 function main_menu() {
 	while true; do
 	    clear
-	    echo "===================Nimble一键部署脚本==================="
+	    echo "===================Spectre Network一键部署脚本==================="
 		echo "沟通电报群：https://t.me/lumaogogogo"
-		echo "最低配置：8C16G256G+RTX2080，推荐配置：16C32G256G+RTX3090"
+		echo "CPU挖矿，CPU数越多越快"
 	    echo "请选择要执行的操作:"
 	    echo "1. 部署节点"
 	    echo "2. 创建钱包"
