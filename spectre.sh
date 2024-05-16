@@ -69,10 +69,26 @@ function view_logs(){
 
 # 查看余额
 function check_balance(){
-
     read -p "钱包地址:" wallet_addr
     $HOME/spectre-network/bin/spectrewallet balance $wallet_addr
+}
 
+# 卸载节点
+function uninstall_node() {
+    echo "确定要卸载Spectre节点吗？这将会删除所有相关的数据。[Y/N]"
+    read -r -p "请确认: " response
+
+    case "$response" in
+        [yY][eE][sS]|[yY]) 
+            echo "开始卸载节点..."
+            screen -ls | grep 'spectre_' | cut -d. -f1 | awk '{print $1}' | xargs -r kill
+            rm -rf $HOME/.spectred && rm -rf $HOME/spectre-network
+            echo "卸载完成。"
+            ;;
+        *)
+            echo "取消卸载操作。"
+            ;;
+    esac
 }
 
 # 主菜单
@@ -83,11 +99,12 @@ function main_menu() {
 		echo "沟通电报群：https://t.me/lumaogogogo"
 		echo "CPU挖矿，CPU数越多越快"
 	    echo "请选择要执行的操作:"
-	    echo "1. 部署节点"
-	    echo "2. 创建钱包"
-	    echo "3. 开始挖矿"
-	    echo "4. 查看日志"
-	    echo "5. 查看余额"
+	    echo "1. 部署节点 install_node"
+	    echo "2. 创建钱包 create_wallet"
+	    echo "3. 开始挖矿 start_mining"
+	    echo "4. 查看日志 view_logs"
+	    echo "5. 查看余额 check_balance"
+	    echo "6. 卸载节点 uninstall_node"
 	    echo "0. 退出脚本exit"
 	    read -p "请输入选项: " OPTION
 	
@@ -97,6 +114,7 @@ function main_menu() {
 	    3) start_mining ;;
 	    4) view_logs ;;
 	    5) check_balance ;;
+	    6) uninstall_node ;;
 	    0) echo "退出脚本。"; exit 0 ;;
 	    *) echo "无效选项，请重新输入。"; sleep 3 ;;
 	    esac
