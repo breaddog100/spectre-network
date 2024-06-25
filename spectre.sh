@@ -24,7 +24,7 @@ function install_node() {
 	sleep 3
 	kill $SPECTRED_PID
 	cd $HOME
-	wget https://spectre-network.org/downloads/datadir2.zip
+	wget https://spectre-network.org/downloads/legacy/datadir2.zip
 	unzip datadir2.zip -d $HOME/.spectred/spectre-mainnet
 	cd $HOME/spectre-network/bin
 	screen -dmS spectre_node bash -c './spectred --utxoindex'
